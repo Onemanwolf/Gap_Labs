@@ -986,7 +986,6 @@ spec:
 
 ```
 
-
 ```Console
 kubectl apply -f kubernetes/step-3-update-voting-app-with-new-storage.yaml --namespace voting
 ```
@@ -994,6 +993,7 @@ kubectl apply -f kubernetes/step-3-update-voting-app-with-new-storage.yaml --nam
 The following example output shows the Kubernetes objects are successfully updated or created:
 
 #### Output
+
 ```
 service/voting-storage configured
 secret/voting-storage-secret created
@@ -1011,49 +1011,43 @@ kubectl get pods --namespace voting -w
 
 You should now be able to switch between the version 1.0 and version 2.0 (canary) of the voting application. The feature flag toggle at the bottom of the screen sets a cookie. This cookie is used by the voting-app Virtual Service to route users to the new version 2.0.
 
-Version 1.0 of the AKS Voting app - feature flag IS NOT set.
+![Version 1.0 of the AKS Voting app - feature flag IS NOT set.](./Images/scenario-routing-canary-release-01.png)
 
-Version 2.0 of the AKS Voting app - feature flag IS set.
+![Version 2.0 of the AKS Voting app - feature flag IS set.](./Images/scenario-routing-canary-release-02.png)
 
 The vote counts are different between the versions of the app. This difference highlights that you are using two different storage backends.
 
-Finalize the rollout
+# Finalize the rollout
+
 Once you've successfully tested the canary release, update the voting-app Virtual Service to route all traffic to version 2.0 of the voting-app component. All users then see version 2.0 of the application, regardless of whether the feature flag is set or not:
 
 Diagram that shows that users see version 2.0 of the application, regardless of whether the feature flag is set or not.
+
+![Diagram that shows that users see version 2.0 of the application, regardless of whether the feature flag is set or not.](./Images/scenario-routing-components-04.png)
 
 Update all the Destination Rules to remove the versions of the components you no longer want active. Then, update all the Virtual Services to stop referencing those versions.
 
 Since there's no longer any traffic to any of the older versions of the components, you can now safely delete all the deployments for those components.
 
 The AKS Voting app components and routing.
+![Diagram that shows that users see version 2.0 of the application, regardless of whether the feature flag is set or not.](./Images/scenario-routing-components-05.png)
 
 You have now successfully rolled out a new version of the AKS Voting App.
 
-Clean up
+## Clean up
+
 You can remove the AKS voting app we used in this scenario from your AKS cluster by deleting the voting namespace as follows:
 
-Console
-
-Copy
+```Console
 kubectl delete namespace voting
+```
+
 The following example output shows that all the components of the AKS voting app have been removed from your AKS cluster.
 
-Output
-
-Copy
+#### Output
+```
 namespace "voting" deleted
 
 ```
 
-```
 
-```
-
-```
-
-```
-
-```
-
-```
