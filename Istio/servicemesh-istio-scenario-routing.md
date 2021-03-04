@@ -39,8 +39,6 @@ kubectl create namespace voting
 Label the namespace with istio-injection=enabled. This label instructs Istio to automatically inject the istio-proxies as sidecars into all of your pods in this namespace.
 
 ```Console
-
-Copy
 kubectl label namespace voting istio-injection=enabled
 ```
 
@@ -1029,8 +1027,7 @@ Update all the Destination Rules to remove the versions of the components you no
 
 Since there's no longer any traffic to any of the older versions of the components, you can now safely delete all the deployments for those components.
 
-The AKS Voting app components and routing.
-![Diagram that shows that users see version 2.0 of the application, regardless of whether the feature flag is set or not.](./Images/scenario-routing-components-05.png)
+![The AKS Voting app components and routing.](./Images/scenario-routing-components-05.png)
 
 You have now successfully rolled out a new version of the AKS Voting App.
 
@@ -1047,7 +1044,6 @@ The following example output shows that all the components of the AKS voting app
 #### Output
 ```
 namespace "voting" deleted
-
 ```
 
 
