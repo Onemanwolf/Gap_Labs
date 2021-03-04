@@ -296,49 +296,6 @@ istioctl dashboard envoy
 <pod-name>.<namespace>
 ```
 
-# Uninstall Istio from AKS
-
-> Warning
->
-> Deleting Istio from a running system may result in traffic related issues between your services. Ensure that you have made provisions for your system to still operate correctly without Istio before proceeding.
-
-# Remove Istio
-
-To remove Istio from your AKS cluster, delete the IstioOperator resource named istio-control-plane that we added earlier. The Istio Operator will recognize that the Istio Operator Spec has been removed, and then delete all the associated Istio components.
-
-#### Bash
-
-```
-kubectl delete istiooperator istio-control-plane -n istio-system
-```
-
-You can run the following to check when all the Istio components have been deleted.
-
-#### Bash
-
-```
-kubectl get all -n istio-system
-```
-
-# Remove Istio Operator
-
-Once Istio has been successfully uninstalled, you can also remove the Istio Operator.
-
-#### Bash
-
-```
-istioctl operator remove
-```
-
-And then finally, remove the istio- namespaces.
-
-#### Bash
-
-```
-kubectl delete ns istio-system
-kubectl delete ns istio-operator
-```
-
 ## Next steps
 
 # About this application scenario
