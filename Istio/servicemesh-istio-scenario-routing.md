@@ -118,7 +118,7 @@ istioctl profile dump default
 
 Create a file called istio.aks.yaml with the following content. This file will hold the Istio Operator Spec for configuring Istio.
 
-####Bash
+#### Bash
 
 ```
 code istio.aks.yaml
