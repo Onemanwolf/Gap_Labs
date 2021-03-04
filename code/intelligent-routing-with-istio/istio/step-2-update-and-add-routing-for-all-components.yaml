@@ -19,15 +19,13 @@ spec:
         port:
           number: 8080
 ---
-# voting-policy.yaml
-apiVersion: "authentication.istio.io/v1alpha1"
-kind: "Policy"
+apiVersion: "security.istio.io/v1beta1"
+kind: "PeerAuthentication"
 metadata:
   name: "default"
 spec:
-  peers:
-  - mtls: 
-      mode: STRICT
+  mtls:
+    mode: STRICT
 ---
 # voting-app-destinationrule-1.0.yaml
 apiVersion: networking.istio.io/v1alpha3

@@ -363,7 +363,7 @@ The artifacts you need to follow along with this article are available in the Az
 
 ```Console
 
-git clone https://github.com/Azure-Samples/aks-voting-app.git
+git clone https://github.com/Onemanwolf/Gap_Labs.git
 
 ```
 
