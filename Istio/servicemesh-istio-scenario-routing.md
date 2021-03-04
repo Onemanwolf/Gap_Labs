@@ -1,3 +1,346 @@
+# Prerequisites
+
+- Use the Bash environment in Azure Cloud Shell.
+
+[![Launch Cloud Shell in a new window](./Images/hdi-launch-cloud-shell.png)](https://shell.azure.com/)
+
+# Create AKS cluster
+
+Use the [az aks create](https://docs.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest&preserve-view=true#az-aks-create) command to create an AKS cluster. The following example creates a cluster named myAKSCluster with one node. This will take several minutes to complete.
+
+### Azure CLI
+
+```
+az aks create --resource-group myResourceGroup --name myAKSCluster --node-count 2 --enable-addons monitoring --generate-ssh-keys
+```
+
+After a few minutes, the command completes and returns JSON-formatted information about the cluster.
+
+> Note
+>
+> When creating an AKS cluster a second resource group is automatically created to store the AKS resources. For more information see Why are two resource groups created with AKS?
+
+o configure kubectl to connect to your Kubernetes cluster, use the az aks get-credentials command. This command downloads credentials and configures the Kubernetes CLI to use them.
+
+#### Azure CLI
+
+```
+az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
+```
+
+Note
+
+The above command uses the default location for the Kubernetes configuration file, which is ~/.kube/config. You can specify a different location for your Kubernetes configuration file using --file.
+
+To verify the connection to your cluster, use the kubectl get command to return a list of the cluster nodes.
+
+#### Azure CLI
+
+```
+kubectl get nodes
+```
+
+The following example output shows the single node created in the previous steps. Make sure that the status of the node is Ready:
+
+#### Output
+
+```
+NAME STATUS ROLES AGE VERSION
+aks-nodepool1-31718369-0 Ready agent 6m44s v1.12.8
+```
+
+# Install the Istio Operator on AKS
+
+Istio provides an Operator to manage installation and updates to the Istio components within your AKS cluster. We'll install the Istio Operator using the istioctl client binary.
+
+#### Bash
+
+```
+
+istioctl operator init
+
+```
+
+You should see something like the following output to confirm that the Istio Operator has been installed.
+
+```Console
+Using operator Deployment image: docker.io/istio/operator:1.7.3
+✔ Istio operator installed
+✔ Installation complete
+```
+
+The Istio Operator is installed into the istio-operator namespace. Query the namespace.
+
+#### Bash
+
+```
+kubectl get all -n istio-operator
+```
+
+You should see the following components deployed.
+
+```Console
+NAME                                  READY   STATUS    RESTARTS   AGE
+pod/istio-operator-6d7958b7bf-wxgdc   1/1     Running   0          2m43s
+
+NAME                     TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
+service/istio-operator   ClusterIP   10.0.8.57    <none>        8383/TCP   2m43s
+
+NAME                             READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/istio-operator   1/1     1            1           2m43s
+
+NAME                                        DESIRED   CURRENT   READY   AGE
+replicaset.apps/istio-operator-6d7958b7bf   1         1         1       2m43s
+```
+
+You can learn more about the Operator pattern and how it can help automate complex tasks via kubernetes.io.
+
+# Install Istio components
+
+Now that we've successfully installed the Istio Operator in our AKS cluster, it's time to install the Istio components.
+
+We will leverage the default Istio Configuration Profile to build the Istio Operator Spec.
+
+You can run the following istioctl command to view the configuration for the default Istio Configuration Profile.
+
+#### Bash
+
+```
+istioctl profile dump default
+```
+
+> Note
+> Istio currently must be scheduled to run on Linux nodes. If you have Windows Server nodes in your cluster, you must ensure that the Istio pods are only scheduled to run on Linux nodes. We'll use node selectors to make sure pods are scheduled to the correct nodes.
+
+> Caution
+
+> The Istio CNI Istio features are currently in Alpha, so thought should be given before enabling these.
+
+Create a file called istio.aks.yaml with the following content. This file will hold the Istio Operator Spec for configuring Istio.
+
+####Bash
+
+```
+code istio.aks.yaml
+```
+
+#### YAML
+
+```
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+namespace: istio-system
+name: istio-control-plane
+spec:
+
+# Use the default profile as the base
+
+# More details at: https://istio.io/docs/setup/additional-setup/config-profiles/
+
+profile: default
+
+# Enable the addons that we will want to use
+
+addonComponents:
+grafana:
+enabled: true
+prometheus:
+enabled: true
+tracing:
+enabled: true
+kiali:
+enabled: true
+values:
+global: # Ensure that the Istio pods are only scheduled to run on Linux nodes
+defaultNodeSelector:
+beta.kubernetes.io/os: linux
+kiali:
+dashboard:
+auth:
+strategy: anonymous
+```
+
+Create the `istio-system` namespace and deploy the Istio Operator Spec to that namespace. The Istio Operator will be watching for the Istio Operator Spec and will use it to install and configure Istio in your AKS cluster.
+
+#### Bash
+
+```
+kubectl create ns istio-system
+```
+
+#### Bash
+
+```
+kubectl apply -f istio.aks.yaml
+```
+
+At this point, you've deployed Istio to your AKS cluster. To ensure that we have a successful deployment of Istio, let's move on to the next section to [Validate the Istio installation](https://docs.microsoft.com/en-us/azure/aks/servicemesh-istio-install?pivots=client-operating-system-linux#validate-the-istio-installation).
+
+Validate the Istio installation
+Query the istio-system namespace, where the Istio and add-on components were installed by the Istio Operator:
+
+#### Bash
+
+```
+kubectl get all -n istio-system
+```
+
+You should see the following components:
+
+- istio\* - the Istio components
+- jaeger-\*, tracing, and zipkin - tracing addon
+- prometheus - metrics addon
+- grafana - analytics and monitoring dashboard addon
+  kiali - service mesh dashboard addon
+
+```Console
+NAME READY STATUS RESTARTS AGE
+pod/grafana-7cf9794c74-mpfbp 1/1 Running 0 5m53s
+pod/istio-ingressgateway-86b5dbdcb9-ndrp5 1/1 Running 0 5m57s
+pod/istio-tracing-c98f4b8fc-zqklg 1/1 Running 0 82s
+pod/istiod-6965c56995-4ph9h 1/1 Running 0 6m15s
+pod/kiali-7b44985d68-p87zh 1/1 Running 0 81s
+pod/prometheus-6868989549-5ghzz 1/1 Running 0 81s
+
+NAME TYPE CLUSTER-IP EXTERNAL-IP PORT(S) AGE
+service/grafana ClusterIP 10.0.226.39 <none> 3000/TCP 5m54s
+service/istio-ingressgateway LoadBalancer 10.0.143.56 20.53.72.254 15021:32166/TCP,80:31684/TCP,443:31302/TCP,15443:30863/TCP 5m57s
+service/istiod ClusterIP 10.0.211.228 <none> 15010/TCP,15012/TCP,443/TCP,15014/TCP,853/TCP 6m16s
+service/jaeger-agent ClusterIP None <none> 5775/UDP,6831/UDP,6832/UDP 82s
+service/jaeger-collector ClusterIP 10.0.7.62 <none> 14267/TCP,14268/TCP,14250/TCP 82s
+service/jaeger-collector-headless ClusterIP None <none> 14250/TCP 82s
+service/jaeger-query ClusterIP 10.0.52.172 <none> 16686/TCP 82s
+service/kiali ClusterIP 10.0.71.179 <none> 20001/TCP 82s
+service/prometheus ClusterIP 10.0.171.151 <none> 9090/TCP 82s
+service/tracing ClusterIP 10.0.195.137 <none> 80/TCP 82s
+service/zipkin ClusterIP 10.0.136.111 <none> 9411/TCP 82s
+
+NAME READY UP-TO-DATE AVAILABLE AGE
+deployment.apps/grafana 1/1 1 1 5m54s
+deployment.apps/istio-ingressgateway 1/1 1 1 5m58s
+deployment.apps/istio-tracing 1/1 1 1 83s
+deployment.apps/istiod 1/1 1 1 6m16s
+deployment.apps/kiali 1/1 1 1 83s
+deployment.apps/prometheus 1/1 1 1 82s
+
+NAME DESIRED CURRENT READY AGE
+replicaset.apps/grafana-7cf9794c74 1 1 1 5m54s
+replicaset.apps/istio-ingressgateway-86b5dbdcb9 1 1 1 5m58s
+replicaset.apps/istio-tracing-c98f4b8fc 1 1 1 83s
+replicaset.apps/istiod-6965c56995 1 1 1 6m16s
+replicaset.apps/kiali-7b44985d68 1 1 1 82s
+replicaset.apps/prometheus-6868989549 1 1 1 82s
+
+NAME REFERENCE TARGETS MINPODS MAXPODS REPLICAS AGE
+horizontalpodautoscaler.autoscaling/istio-ingressgateway Deployment/istio-ingressgateway 7%/80% 1 5 1 5m57s
+horizontalpodautoscaler.autoscaling/istiod Deployment/istiod 1%/80% 1 5 1 6m16s
+```
+
+You can also gain additional insight into the installation by watching the logs for the Istio Operator.
+
+#### Bash
+
+```
+kubectl logs -n istio-operator -l name=istio-operator -f
+```
+
+If the `istio-ingressgateway` shows an external ip of <pending>, wait a few minutes until an IP address has been assigned by Azure networking.
+
+All of the pods should show a status of Running. If your pods don't have these statuses, wait a minute or two until they do. If any pods report an issue, use the kubectl describe pod command to review their output and status.
+
+# Accessing the add-ons
+
+A number of add-ons were installed by the Istio Operator that provide additional functionality. The web applications for the add-ons are not exposed publicly via an external ip address.
+
+To access the add-on user interfaces, use the istioctl dashboard command. This command uses [kubectl port-forward](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#port-forward) and a random port to create a secure connection between your client machine and the relevant pod in your AKS cluster. It will then automatically open the add-on web application in your default browser.
+
+## Grafana
+
+The analytics and monitoring dashboards for Istio are provided by Grafana. Remember to use the credentials you created via the Grafana secret earlier when prompted. Open the Grafana dashboard securely as follows:
+
+```Console
+istioctl dashboard grafana
+```
+
+## Prometheus
+
+Metrics for Istio are provided by Prometheus. Open the Prometheus dashboard securely as follows:
+
+```Console
+istioctl dashboard prometheus
+```
+
+## Jaeger
+
+Tracing within Istio is provided by Jaeger. Open the Jaeger dashboard securely as follows:
+
+```Console
+istioctl dashboard jaeger
+```
+
+## Kiali
+
+A service mesh observability dashboard is provided by Kiali. Remember to use the credentials you created via the Kiali secret earlier when prompted. Open the Kiali dashboard securely as follows:
+
+```Console
+istioctl dashboard kiali
+```
+
+## Envoy
+
+A simple interface to the Envoy proxies is available. It provides configuration information and metrics for an Envoy proxy running in a specified pod. Open the Envoy interface securely as follows:
+
+```Console
+istioctl dashboard envoy
+<pod-name>.<namespace>
+```
+
+# Uninstall Istio from AKS
+
+> Warning
+>
+> Deleting Istio from a running system may result in traffic related issues between your services. Ensure that you have made provisions for your system to still operate correctly without Istio before proceeding.
+
+# Remove Istio
+
+To remove Istio from your AKS cluster, delete the IstioOperator resource named istio-control-plane that we added earlier. The Istio Operator will recognize that the Istio Operator Spec has been removed, and then delete all the associated Istio components.
+
+#### Bash
+
+```
+kubectl delete istiooperator istio-control-plane -n istio-system
+```
+
+You can run the following to check when all the Istio components have been deleted.
+
+#### Bash
+
+```
+kubectl get all -n istio-system
+```
+
+# Remove Istio Operator
+
+Once Istio has been successfully uninstalled, you can also remove the Istio Operator.
+
+#### Bash
+
+```
+istioctl operator remove
+```
+
+And then finally, remove the istio- namespaces.
+
+#### Bash
+
+```
+kubectl delete ns istio-system
+kubectl delete ns istio-operator
+```
+
+## Next steps
+
 # About this application scenario
 
 The sample AKS voting app provides two voting options (Cats or Dogs) to users. There is a storage component that persists the number of votes for each option. Additionally, there is an analytics component that provides details around the votes cast for each option.
@@ -1042,8 +1385,7 @@ kubectl delete namespace voting
 The following example output shows that all the components of the AKS voting app have been removed from your AKS cluster.
 
 #### Output
+
 ```
 namespace "voting" deleted
 ```
-
-
