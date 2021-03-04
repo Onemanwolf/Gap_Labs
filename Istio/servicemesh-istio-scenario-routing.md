@@ -370,7 +370,7 @@ git clone https://github.com/Onemanwolf/Gap_Labs.git
 Change to the following folder in the downloaded / cloned repo and run all subsequent steps from this folder:
 
 ```Console
-cd aks-voting-app/scenarios/intelligent-routing-with-istio
+cd Gap_Labs/code/intelligent-routing-with-istio/
 ```
 
 First, create a namespace in your AKS cluster for the sample AKS voting app named voting as follows:
@@ -386,6 +386,8 @@ kubectl label namespace voting istio-injection=enabled
 ```
 
 Now let's create the components for the AKS Voting app. Create these components in the voting namespace created in a previous step.
+
+#### YAML
 
 ```
 # voting-storage-deployment-1.0.yaml
