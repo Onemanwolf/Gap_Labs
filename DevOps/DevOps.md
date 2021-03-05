@@ -32,9 +32,9 @@ The following tasks will be performed:
 
 # Before you begin
 
-1. Refer the Getting Started page to know the prerequisites for this lab.
+1. Refer the [Getting Started](https://www.azuredevopslabs.com/labs/vstsextend/Setup/) page to know the prerequisites for this lab.
 
-2. Click the Azure DevOps Demo Generator link and follow the instructions in Getting Started page to provision the project to your **Azure DevOps**.
+2. Click the [Azure DevOps Demo Generator](http://azuredevopsdemogenerator.azurewebsites.net/?TemplateId=77372&Name=AKS) link and follow the instructions in [Getting Started](https://www.azuredevopslabs.com/labs/vstsextend/Setup/) page to provision the project to your **Azure DevOps**.
 
 For this lab the **Azure Kubernetes Service template** is used which is already selected when you click on the link above. There are some additional extensions required for this lab and can be automatically installed during the process.
 
@@ -50,7 +50,7 @@ The following azure resources need to be configured for this lab:
 
 2. Deploy Kubernetes to Azure, using CLI:
 
-   I. Get the latest available Kubernetes version in your preferred region into a bash variable. Replace <region> with the region of your choosing, for example eastus.
+   I. Get the latest available Kubernetes version in your preferred region into a bash variable. Replace `<region>` with the region of your choosing, for example eastus.
 
    #### Bash
 
@@ -149,7 +149,7 @@ For more information see document on how to [Authenticate with Azure Container R
 
    ![Allow Services](./Images/allow.png)
 
-9. Navigate to the resource group, select the created container registry and make a note of the Login server name.
+9. Navigate to the resource group, select the created container registry and make a note of the **Login server name**.
 
    ![Deploy to Azure](./Images/getacrserver.png)
 
@@ -157,17 +157,17 @@ Now you have all the required azure components to follow this lab.
 
 # Exercise 1: Configure Build and Release pipeline
 
-Make sure that you have created the AKS project in your Azure DevOps organization through Azure DevOps Demo Generator (as mentioned in pre-requisites). We will manually map Azure resources such as AKS and Azure Container Registry to the build and release definitions.
+Make sure that you have created the AKS project in your Azure DevOps organization through [Azure DevOps Demo Generator](http://azuredevopsdemogenerator.azurewebsites.net/?TemplateId=77372&Name=AKS) (as mentioned in pre-requisites). We will manually map Azure resources such as AKS and Azure Container Registry to the build and release definitions.
 
-1. Navigate to Pipelines –> Pipelines.
+1. Navigate to **Pipelines** –> **Pipelines**.
 
    ![./Images/pipelines.pngbuild](./Images/pipelines.png)
 
-2. Select MyHealth.AKS.Build pipeline and click Edit.
+2. Select **MyHealth.AKS.Build** pipeline and click **Edit**.
 
    ![build](./Images/editbuild.png)
 
-3. In Run services task, select your Azure subscription from Azure subscription dropdown. Click Authorize.
+3. In **Run services** task, select your **Azure subscription** from **Azure subscription dropdown**. Click **Authorize**.
 
    ![azureendpoint](./Images/endpoint.png)
 
@@ -179,7 +179,7 @@ Make sure that you have created the AKS project in your Azure DevOps organizatio
 
 4. Following the successful authentication, select appropriate values from the dropdown - **Azure subscription** and **Azure Container Registry** as shown.
 
-   Repeat this step for the tasks in the pipeline:
+   **Repeat this step** for the tasks in the pipeline:
 
    1. Run services
    2. Build services
@@ -192,7 +192,7 @@ Make sure that you have created the AKS project in your Azure DevOps organizatio
 
 **applicationsettings.json** file contains details of the database connection string used to connect to Azure database which was created in the beginning of this lab.
 
-**mhc-aks.yaml** manifest file contains configuration details of deployments, services and pods which will be deployed in Azure Kubernetes Service. The manifest file will look like as below
+**mhc-aks.yaml** manifest file contains configuration details of **deployments**, **services** and **pods** which will be deployed in **Azure Kubernetes Service**. The manifest file will look like as below
 
 Navigate to the **Repos** click on **Files** then click on **mhc-aks.yaml** then click the **Edit** button edit the image on **line 98** and then commit changes.
 
@@ -346,18 +346,18 @@ spec:
 
 For more information on the deployment manifest, see [AKS Deployments and YAML manifests](https://docs.microsoft.com/en-us/azure/aks/concepts-clusters-workloads#deployments-and-yaml-manifests)
 
-6. Click on the Variables tab.
+6. Click on the **Variables** tab.
 
    ![Variables](./Images/variables.png)
 
-   I. Update ACR and SQLserver values for Pipeline Variables with the details noted earlier while configuring the environment.
+   I. Update **ACR** and **SQLserver** values for **Pipeline Variables** with the details noted earlier while configuring the environment.
    ![updateprocessbd](./Images/updatevariablesbd.png)
 
-7. Save the changes.
+7. **Save** the changes.
 
    ![./Images/savebuild.pngupdateprocessbd](./Images/savebuild.png)
 
-8. **Navigate to Pipelines** | **Releases**. Select **MyHealth.AKS.Release pipeline** and click Edit.
+8. **Navigate to Pipelines** | **Releases**. Select **MyHealth.AKS.Release pipeline** and click **Edit**.
 
    ![release](./Images/release.png)
 
@@ -365,36 +365,36 @@ For more information on the deployment manifest, see [AKS Deployments and YAML m
 
    ![releasetasks](./Images/viewstagetasks.png)
 
-10. In the Dev environment, under the DB deployment phase, select Azure Resource Manager from the drop down for Azure Service Connection Type, update the Azure Subscription value from the dropdown for Execute Azure SQL: DacpacTask task.
+10. In the **Dev** environment, under the **DB deployment** phase, select **Azure Resource Manager** from the drop down for **Azure Service Connection** Type, update the **Azure Subscription** value from the dropdown for **Execute Azure SQL: DacpacTask** task.
 
     ![update_CD3](./Images/dbdeploytask.png)
 
 11. In the **AKS deployment phase**, select **Create Deployments & Services** in AKS task.
 
-    ![deploy](./images/aksdeploytask.png)
+    ![deploy](./Images/aksdeploytask.png)
 
     I. Update the Azure Subscription, Resource Group and Kubernetes cluster from the dropdown. Expand the Secrets section and update the parameters for Azure subscription and Azure container registry from the dropdown.
 
-    ![createDeployaks](./images/aksdeploytask2.png)
+    ![createDeployaks](./Images/aksdeploytask2.png)
 
-    II. Repeat similar steps for Update image in AKS task.
+    II. Repeat similar steps for **Update image in AKS** task.
 
-    ![updateaks](./images/updateaksrelease.png)
+    ![updateaks](./Images/updateaksrelease.png)
 
-- Create Deployments & Services in AKS will create the deployments and services in AKS as per the configuration specified in mhc-aks.yaml file. The Pod, for the first time will pull up the latest docker image.
+- **Create Deployments & Services** in AKS will create the deployments and services in AKS as per the configuration specified in mhc-aks.yaml file. The Pod, for the first time will pull up the latest docker image.
 
-- Update image in AKS will pull up the appropriate image corresponding to the BuildID from the repository specified, and deploys the docker image to the mhc-front pod running in AKS.
+- **Update image in AKS** will pull up the appropriate image corresponding to the BuildID from the repository specified, and deploys the docker image to the **mhc-front pod** running in AKS.
 
-- A secret called mysecretkey is created in AKS cluster through Azure DevOps by using command kubectl create secret in the background. This secret will be used for authorization while pulling myhealth.web image from the Azure Container Registry.
+- A secret called **mysecretkey** is created in AKS cluster through Azure DevOps by using command kubectl create secret in the background. This secret will be used for authorization while pulling myhealth.web image from the Azure Container Registry.
 
-12. Select the Variables section under the release definition, update **ACR** and **SQL server** values for **Pipeline Variables** with the details noted earlier while configuring the environment. Select the Save button.
+12. Select the **Variables** section under the release definition, update **ACR** and **SQL server** values for **Pipeline Variables** with the details noted earlier while configuring the environment. Select the Save button.
 
-> Note: The Database Name is set to mhcdb and the Server Admin Login is sqladmin and Password is P2ssw0rd1234. If you have entered different details while creating Azure SQL server, update the values accordingly
+> Note: The **Database Name** is set to **mhcdb** and the **Server Admin Login is sqladmin** and Password is P2ssw0rd1234. If you have entered different details while creating Azure SQL server, update the values accordingly
 > releasevariables
 
 # Exercise 2: Trigger a Build and deploy application
 
-In this exercise, let us trigger a build manually and upon completion, an automatic deployment of the application will be triggered. Our application is designed to be deployed in the pod with the load balancer in the front-end and Redis cache in the back-end.
+In this exercise, let us trigger a build manually and upon completion, an automatic deployment of the application will be triggered. Our application is designed to be deployed in the pod with the **load balancer** in the front-end and **Redis cache** in the back-end.
 
 1. Select MyHealth.AKS.build pipeline. Click on Run pipeline
 
@@ -404,18 +404,18 @@ In this exercise, let us trigger a build manually and upon completion, an automa
 
    ![clickbuild](./Images/buildprogress.gif)
 
-3. The build will generate and push the docker image to ACR. After the build is completed, you will see the build summary. To view the generated images navigate to the Azure Portal, select the Azure Container Registry and navigate to the Repositories.
+3. The build will generate and push the docker image to ACR. After the build is completed, you will see the build summary. To view the generated images navigate to the Azure Portal, select the **Azure Container Registry** and navigate to the **Repositories**.
 
    ![imagesinrepo](./Images/imagesinrepo.png)
 
-4. Switch back to the Azure DevOps portal. Select the Releases tab in the Pipelines section and double-click on the latest release. Select In progress link to see the live logs and release summary.
+4. Switch back to the Azure DevOps portal. Select the **Releases** tab in the Pipelines section and double-click on the latest release. Select **In progress** link to see the live logs and release summary.
 
    ![releaseinprog](./Images/releaseinprog.png)
 
    ![release_summary1](./Images/release_summary1.png)
 
 5. Once the release is complete, launch the Azure Cloud Shell and run the below commands to see the pods running in AKS:
-
+[https://docs.microsoft.com/en-in/azure/cloud-shell/overview](https://docs.microsoft.com/en-in/azure/cloud-shell/overview)
    I. Type az **aks get-credentials --resource-group yourResourceGroup --name yourAKSname** in the command prompt to get the access credentials for the Kubernetes cluster. Replace the variables **yourResourceGroup** and **yourAKSname** with the actual values.
 
    #### Bash
@@ -438,7 +438,7 @@ In this exercise, let us trigger a build manually and upon completion, an automa
 
    The deployed web application is running in the displayed pods.
 
-6. To access the application, run the below command. If you see that External-IP is pending, wait for sometime until an IP is assigned.
+6. To access the application, run the below command. If you see that **External-IP** is pending, wait for sometime until an IP is assigned.
 
    #### Bash
 
