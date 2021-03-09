@@ -58,15 +58,7 @@ The following azure resources need to be configured for this lab:
    version=$(az aks get-versions -l <region> --query 'orchestrators[-1].orchestratorVersion' -o tsv)
    ```
 
-   II. Create a Resource Group
-
-   #### Bash
-
-   ```
-   az group create --name akshandsonlab --location <region>
-   ```
-
-   III. Create AKS using the latest version available
+   II. Create AKS using the latest version available
 
    #### Bash
 
@@ -415,7 +407,7 @@ In this exercise, let us trigger a build manually and upon completion, an automa
    ![release_summary1](./Images/release_summary1.png)
 
 5. Once the release is complete, launch the Azure Cloud Shell and run the below commands to see the pods running in AKS:
-[https://docs.microsoft.com/en-in/azure/cloud-shell/overview](https://docs.microsoft.com/en-in/azure/cloud-shell/overview)
+   [https://docs.microsoft.com/en-in/azure/cloud-shell/overview](https://docs.microsoft.com/en-in/azure/cloud-shell/overview)
    I. Type az **aks get-credentials --resource-group yourResourceGroup --name yourAKSname** in the command prompt to get the access credentials for the Kubernetes cluster. Replace the variables **yourResourceGroup** and **yourAKSname** with the actual values.
 
    #### Bash
@@ -463,8 +455,10 @@ resource review
 More information found at: https://docs.microsoft.com/en-us/azure/aks/kubernetes-portal
 
 ## Summary
+
 [Azure Kubernetes Service](https://azure.microsoft.com/en-us/services/container-service/) (AKS) reduces the complexity and operational overhead of managing a Kubernetes cluster by offloading much of that responsibility to the Azure. With Azure DevOps and Azure Container Services (AKS), we can build DevOps for dockerized applications by leveraging docker capabilities enabled on Azure DevOps Hosted Agents.
 
 ## Reference
+
 Thanks to Mohamed Radwan for making a video on this lab. You can watch the following video that walks you through all the steps explained in this lab:
 https://youtu.be/4DUhc0MjdUc
