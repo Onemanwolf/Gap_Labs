@@ -194,46 +194,46 @@ You should see the following components:
   kiali - service mesh dashboard addon
 
 ```Console
-NAME READY STATUS RESTARTS AGE
-pod/grafana-7cf9794c74-mpfbp 1/1 Running 0 5m53s
-pod/istio-ingressgateway-86b5dbdcb9-ndrp5 1/1 Running 0 5m57s
-pod/istio-tracing-c98f4b8fc-zqklg 1/1 Running 0 82s
-pod/istiod-6965c56995-4ph9h 1/1 Running 0 6m15s
-pod/kiali-7b44985d68-p87zh 1/1 Running 0 81s
-pod/prometheus-6868989549-5ghzz 1/1 Running 0 81s
+NAME                                       READY   STATUS    RESTARTS   AGE
+pod/grafana-7cf9794c74-98ckf               1/1     Running   0          9h
+pod/istio-ingressgateway-5c77bb978-cdxdj   1/1     Running   0          9h
+pod/istio-tracing-c98f4b8fc-pp6nn          1/1     Running   0          9h
+pod/istiod-64df8d496d-l4zxf                1/1     Running   0          9h
+pod/kiali-7b44985d68-qrkt9                 1/1     Running   0          9h
+pod/prometheus-6868989549-vv4bd            1/1     Running   0          9h
 
-NAME TYPE CLUSTER-IP EXTERNAL-IP PORT(S) AGE
-service/grafana ClusterIP 10.0.226.39 <none> 3000/TCP 5m54s
-service/istio-ingressgateway LoadBalancer 10.0.143.56 20.53.72.254 15021:32166/TCP,80:31684/TCP,443:31302/TCP,15443:30863/TCP 5m57s
-service/istiod ClusterIP 10.0.211.228 <none> 15010/TCP,15012/TCP,443/TCP,15014/TCP,853/TCP 6m16s
-service/jaeger-agent ClusterIP None <none> 5775/UDP,6831/UDP,6832/UDP 82s
-service/jaeger-collector ClusterIP 10.0.7.62 <none> 14267/TCP,14268/TCP,14250/TCP 82s
-service/jaeger-collector-headless ClusterIP None <none> 14250/TCP 82s
-service/jaeger-query ClusterIP 10.0.52.172 <none> 16686/TCP 82s
-service/kiali ClusterIP 10.0.71.179 <none> 20001/TCP 82s
-service/prometheus ClusterIP 10.0.171.151 <none> 9090/TCP 82s
-service/tracing ClusterIP 10.0.195.137 <none> 80/TCP 82s
-service/zipkin ClusterIP 10.0.136.111 <none> 9411/TCP 82s
+NAME                                TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)                                                      AGE
+service/grafana                     ClusterIP      10.0.230.115   <none>           3000/TCP                                                     9h
+service/istio-ingressgateway        LoadBalancer   10.0.96.10     52.151.209.190   15021:30944/TCP,80:30683/TCP,443:31799/TCP,15443:30801/TCP   9h
+service/istiod                      ClusterIP      10.0.211.168   <none>           15010/TCP,15012/TCP,443/TCP,15014/TCP,853/TCP                9h
+service/jaeger-agent                ClusterIP      None           <none>           5775/UDP,6831/UDP,6832/UDP                                   9h
+service/jaeger-collector            ClusterIP      10.0.156.101   <none>           14267/TCP,14268/TCP,14250/TCP                                9h
+service/jaeger-collector-headless   ClusterIP      None           <none>           14250/TCP                                                    9h
+service/jaeger-query                ClusterIP      10.0.127.185   <none>           16686/TCP                                                    9h
+service/kiali                       ClusterIP      10.0.90.62     <none>           20001/TCP                                                    9h
+service/prometheus                  ClusterIP      10.0.211.133   <none>           9090/TCP                                                     9h
+service/tracing                     ClusterIP      10.0.154.96    <none>           80/TCP                                                       9h
+service/zipkin                      ClusterIP      10.0.108.107   <none>           9411/TCP                                                     9h
 
-NAME READY UP-TO-DATE AVAILABLE AGE
-deployment.apps/grafana 1/1 1 1 5m54s
-deployment.apps/istio-ingressgateway 1/1 1 1 5m58s
-deployment.apps/istio-tracing 1/1 1 1 83s
-deployment.apps/istiod 1/1 1 1 6m16s
-deployment.apps/kiali 1/1 1 1 83s
-deployment.apps/prometheus 1/1 1 1 82s
+NAME                                   READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/grafana                1/1     1            1           9h
+deployment.apps/istio-ingressgateway   1/1     1            1           9h
+deployment.apps/istio-tracing          1/1     1            1           9h
+deployment.apps/istiod                 1/1     1            1           9h
+deployment.apps/kiali                  1/1     1            1           9h
+deployment.apps/prometheus             1/1     1            1           9h
 
-NAME DESIRED CURRENT READY AGE
-replicaset.apps/grafana-7cf9794c74 1 1 1 5m54s
-replicaset.apps/istio-ingressgateway-86b5dbdcb9 1 1 1 5m58s
-replicaset.apps/istio-tracing-c98f4b8fc 1 1 1 83s
-replicaset.apps/istiod-6965c56995 1 1 1 6m16s
-replicaset.apps/kiali-7b44985d68 1 1 1 82s
-replicaset.apps/prometheus-6868989549 1 1 1 82s
+NAME                                             DESIRED   CURRENT   READY   AGE
+replicaset.apps/grafana-7cf9794c74               1         1         1       9h
+replicaset.apps/istio-ingressgateway-5c77bb978   1         1         1       9h
+replicaset.apps/istio-tracing-c98f4b8fc          1         1         1       9h
+replicaset.apps/istiod-64df8d496d                1         1         1       9h
+replicaset.apps/kiali-7b44985d68                 1         1         1       9h
+replicaset.apps/prometheus-6868989549            1         1         1       9h
 
-NAME REFERENCE TARGETS MINPODS MAXPODS REPLICAS AGE
-horizontalpodautoscaler.autoscaling/istio-ingressgateway Deployment/istio-ingressgateway 7%/80% 1 5 1 5m57s
-horizontalpodautoscaler.autoscaling/istiod Deployment/istiod 1%/80% 1 5 1 6m16s
+NAME                                                       REFERENCE                         TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/istio-ingressgateway   Deployment/istio-ingressgateway   3%/80%    1         5         1          9h
+horizontalpodautoscaler.autoscaling/istiod                 Deployment/istiod                 0%/80%    1         5         1          9h
 ```
 
 You can also gain additional insight into the installation by watching the logs for the Istio Operator.
