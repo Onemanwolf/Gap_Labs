@@ -133,35 +133,31 @@ code istio.aks.yaml
 apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 metadata:
-namespace: istio-system
-name: istio-control-plane
+  namespace: istio-system
+  name: istio-control-plane
 spec:
-
-# Use the default profile as the base
-
-# More details at: https://istio.io/docs/setup/additional-setup/config-profiles/
-
-profile: default
-
-# Enable the addons that we will want to use
-
-addonComponents:
-grafana:
-enabled: true
-prometheus:
-enabled: true
-tracing:
-enabled: true
-kiali:
-enabled: true
-values:
-global: # Ensure that the Istio pods are only scheduled to run on Linux nodes
-defaultNodeSelector:
-beta.kubernetes.io/os: linux
-kiali:
-dashboard:
-auth:
-strategy: anonymous
+  # Use the default profile as the base
+  # More details at: https://istio.io/docs/setup/additional-setup/config-profiles/
+  profile: default
+  # Enable the addons that we will want to use
+  addonComponents:
+    grafana:
+      enabled: true
+    prometheus:
+      enabled: true
+    tracing:
+      enabled: true
+    kiali:
+      enabled: true
+  values:
+    global:
+      # Ensure that the Istio pods are only scheduled to run on Linux nodes
+      defaultNodeSelector:
+        beta.kubernetes.io/os: linux
+    kiali:
+      dashboard:
+        auth:
+          strategy: anonymous
 ```
 
 Create the `istio-system` namespace and deploy the Istio Operator Spec to that namespace. The Istio Operator will be watching for the Istio Operator Spec and will use it to install and configure Istio in your AKS cluster.
