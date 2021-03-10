@@ -64,7 +64,7 @@ istioctl operator init
 You should see something like the following output to confirm that the Istio Operator has been installed.
 
 ```Console
-Using operator Deployment image: docker.io/istio/operator:1.7.3
+Using operator Deployment image: docker.io/istio/operator:1.7.4
 ✔ Istio operator installed
 ✔ Installation complete
 ```
