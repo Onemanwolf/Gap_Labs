@@ -45,8 +45,11 @@ The following example output shows the single node created in the previous steps
 #### Output
 
 ```
-NAME STATUS ROLES AGE VERSION
-aks-nodepool1-31718369-0 Ready agent 6m44s v1.12.8
+
+NAME                                STATUS   ROLES   AGE     VERSION
+aks-nodepool1-41745961-vmss000000   Ready    agent   4m51s   v1.18.14
+aks-nodepool1-41745961-vmss000001   Ready    agent   4m55s   v1.18.14
+
 ```
 
 # Install the Istio Operator on AKS
