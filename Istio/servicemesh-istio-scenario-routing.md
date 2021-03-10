@@ -254,6 +254,8 @@ A number of add-ons were installed by the Istio Operator that provide additional
 
 To access the add-on user interfaces, use the istioctl dashboard command. This command uses [kubectl port-forward](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#port-forward) and a random port to create a secure connection between your client machine and the relevant pod in your AKS cluster. It will then automatically open the add-on web application in your default browser.
 
+>**Important**:  You must configure and install the applications and configure them on your local machine
+
 ## Grafana
 
 The analytics and monitoring dashboards for Istio are provided by Grafana. Remember to use the credentials you created via the Grafana secret earlier when prompted. Open the Grafana dashboard securely as follows:
