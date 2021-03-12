@@ -86,12 +86,6 @@ az monitor log-analytics workspace create --resource-group g-rsg-2e-exploratoriu
 
    ```
 
-## Clean Resources from Azure Portal
-
-> WARNING DO NOT DELETE YOUR RESOURCE GROUP
-
-1. Delete everything inside the your resource group but leave your `storage account` and your monitoring `workspace`.
-
 ## Create your own Organization for the labs is Azure DevOps
 
 1. Navigate to Gaps Azure Devops [click here](https://dev.azure.com/) and then under Already have an account? click on `Sign in to Azure DevOps >`
@@ -144,3 +138,17 @@ az monitor log-analytics workspace create --resource-group g-rsg-2e-exploratoriu
 9. Once Verify success then provide the connection name & click.
 
    ![Kubernetes and Microservices](./images/serviceconnect9.png)
+
+   ## Clean Resources from Azure Portal after completing the Lab
+
+   > WARNING DO NOT DELETE YOUR RESOURCE GROUP
+
+10. Delete everything inside the your resource group accept for your `storage account` and your monitoring `workspace` we need to leave those to resources in our resource group.
+
+:skull:
+
+    > DO NOT DELETE YOUR RESOURCE GROUP!
+
+    > DO NOT DELETE YOUR STORAGE ACCOUNT!
+
+    > DO NOT DELETE YOUR AZURE MONITOR WORKSPACE!
