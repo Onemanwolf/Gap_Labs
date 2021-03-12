@@ -47,12 +47,11 @@ Lets get started setting up your envorinment for the labs.
 
    ![Kubernetes and Microservices](./images/storageaccount3.png)
 
-## Create you Monitoring
+## Create your Azure Monitoring Workspace
 
-1. Create your Monitoring workspace.
+1. Create your Monitoring workspace run the the below command in your Azure Cloud Shell Bash console.
 
 ```console
-
 az monitor log-analytics workspace create --resource-group g-rsg-2e-exploratorium01-akslab-<aduseraccout> --workspace-name DefaultResourceGroup-<aduseraccount>
 ```
 
