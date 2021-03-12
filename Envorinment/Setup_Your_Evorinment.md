@@ -145,10 +145,8 @@ az monitor log-analytics workspace create --resource-group g-rsg-2e-exploratoriu
 
 10. Delete everything inside the your resource group accept for your `storage account` and your monitoring `workspace` we need to leave those to resources in our resource group.
 
-:skull:
+    > :skull: DO NOT DELETE YOUR RESOURCE GROUP!
 
-    > DO NOT DELETE YOUR RESOURCE GROUP!
+    > :skull: DO NOT DELETE YOUR STORAGE ACCOUNT!
 
-    > DO NOT DELETE YOUR STORAGE ACCOUNT!
-
-    > DO NOT DELETE YOUR AZURE MONITOR WORKSPACE!
+    > :skull: DO NOT DELETE YOUR AZURE MONITOR WORKSPACE!
