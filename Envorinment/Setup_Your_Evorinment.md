@@ -88,7 +88,10 @@ az monitor log-analytics workspace create --resource-group g-rsg-2e-exploratoriu
 
 ## Create your own Organization for the labs is Azure DevOps
 
-1. Navigate to Gaps Azure Devops [click here](https://dev.azure.com/) and then under Already have an account? click on `Sign in to Azure DevOps >`
+
+1.	Navigate to Gaps Azure Devops [click here](https://dev.azure.com/) and use **Normal AD account** ? click on `Sign in to Azure DevOps >`
+
+
 
 ![Kubernetes and Microservices](./images/devopssignin.png)
 
