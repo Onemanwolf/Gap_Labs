@@ -186,168 +186,173 @@ Make sure that you have created the AKS project in your Azure DevOps organizatio
 
 **mhc-aks.yaml** manifest file contains configuration details of **deployments**, **services** and **pods** which will be deployed in **Azure Kubernetes Service**. The manifest file will look like as below
 
-Navigate to the **Repos** click on **Files** then click on **mhc-aks.yaml** then click the **Edit** button edit the image on **line 98** and then commit changes.
 
-![Navigate to the Repo](./Images/Repomhcaksyaml.png)
 
-5. Make sure to change image to point to your acr `<yourarcnamehere>.azurecr.io/myhealth.web:latest`
-
-```Yaml
-apiVersion: apps/v1
-
-kind: Deployment
-
-metadata:
-
-  name: mhc-back
-  labels:
-    app: mhc-back
-spec:
-
-  replicas: 1
-  selector:
-    matchLabels:
-      app: mhc-back
-  template:
-
-    metadata:
-
-      labels:
-
-        app: mhc-back
-
-    spec:
-
-      containers:
-
-      - name: mhc-back
-
-        image: redis
-
-        ports:
-
-        - containerPort: 6379
-
-          name: redis
-
----
-
-apiVersion: v1
-
-kind: Service
-
-metadata:
-
-  name: mhc-back
-
-spec:
-  type: ClusterIP
-  ports:
-
-  - port: 6379
-
-  selector:
-
-    app: mhc-back
-
----
-
-apiVersion: apps/v1
-
-kind: Deployment
-
-metadata:
-
-  name: mhc-front
-
-spec:
-
-  replicas: 1
-
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-
-      maxSurge: 1
-
-      maxUnavailable: 1
-
-  minReadySeconds: 5
-  selector:
-    matchLabels:
-      app: mhc-front
-  template:
-
-    metadata:
-
-      labels:
-
-        app: mhc-front
-
-    spec:
-
-      containers:
-
-      - name: mhc-front
-
-        image: akshandsonlabacr001.azurecr.io/myhealth.web:latest
-
-        imagePullPolicy: Always
-
-        ports:
-
-        - containerPort: 80
-
-        resources:
-
-          requests:
-
-            cpu: 250m
-
-          limits:
-
-            cpu: 500m
-
-        env:
-
-        - name: REDIS
-
-          value: "mhc-back"
-
----
-
-apiVersion: v1
-
-kind: Service
-
-metadata:
-
-  name: mhc-front
-
-spec:
-
-  type: LoadBalancer
-
-  ports:
-
-  - port: 80
-
-  selector:
-    app: mhc-front
-```
-
-For more information on the deployment manifest, see [AKS Deployments and YAML manifests](https://docs.microsoft.com/en-us/azure/aks/concepts-clusters-workloads#deployments-and-yaml-manifests)
-
-6. Click on the **Variables** tab.
+5. Click on the **Variables** tab.
 
    ![Variables](./Images/variables.png)
 
    I. Update **ACR** and **SQLserver** values for **Pipeline Variables** with the details noted earlier while configuring the environment.
    ![updateprocessbd](./Images/updatevariablesbd.png)
 
-7. **Save** the changes.
+6. **Save** the changes.
 
    ![./Images/savebuild.pngupdateprocessbd](./Images/savebuild.png)
+
+   Navigate to the **Repos** click on **Files** then click on **mhc-aks.yaml** then click the **Edit** button edit the image on **line 98** and then commit changes.
+
+   ![Navigate to the Repo](./Images/Repomhcaksyaml.png)
+
+7. Make sure to change image to point to your acr `<yourarcnamehere>.azurecr.io/myhealth.web:latest`
+
+   ```Yaml
+   apiVersion: apps/v1
+   
+   kind: Deployment
+   
+   metadata:
+   
+     name: mhc-back
+     labels:
+       app: mhc-back
+   spec:
+   
+     replicas: 1
+     selector:
+       matchLabels:
+         app: mhc-back
+     template:
+   
+       metadata:
+   
+         labels:
+   
+           app: mhc-back
+   
+       spec:
+   
+         containers:
+   
+         - name: mhc-back
+   
+           image: redis
+   
+           ports:
+   
+           - containerPort: 6379
+   
+             name: redis
+   
+   ---
+   
+   apiVersion: v1
+   
+   kind: Service
+   
+   metadata:
+   
+     name: mhc-back
+   
+   spec:
+     type: ClusterIP
+     ports:
+   
+     - port: 6379
+   
+     selector:
+   
+       app: mhc-back
+   
+   ---
+   
+   apiVersion: apps/v1
+   
+   kind: Deployment
+   
+   metadata:
+   
+     name: mhc-front
+   
+   spec:
+   
+     replicas: 1
+   
+     strategy:
+       type: RollingUpdate
+       rollingUpdate:
+   
+         maxSurge: 1
+   
+         maxUnavailable: 1
+   
+     minReadySeconds: 5
+     selector:
+       matchLabels:
+         app: mhc-front
+     template:
+   
+       metadata:
+   
+         labels:
+   
+           app: mhc-front
+   
+       spec:
+   
+         containers:
+   
+         - name: mhc-front
+   
+           image: akshandsonlabacr001.azurecr.io/myhealth.  web:latest
+   
+           imagePullPolicy: Always
+   
+           ports:
+   
+           - containerPort: 80
+   
+           resources:
+   
+             requests:
+   
+               cpu: 250m
+   
+             limits:
+   
+               cpu: 500m
+   
+           env:
+   
+           - name: REDIS
+   
+             value: "mhc-back"
+   
+   ---
+   
+   apiVersion: v1
+   
+   kind: Service
+   
+   metadata:
+   
+     name: mhc-front
+   
+   spec:
+   
+     type: LoadBalancer
+   
+     ports:
+   
+     - port: 80
+   
+     selector:
+       app: mhc-front
+   ```
+
+For more information on the deployment manifest, see [AKS Deployments and YAML manifests](https://docs.microsoft.com/en-us/azure/aks/concepts-clusters-workloads#deployments-and-yaml-manifests)
+
+
+
 
 8. **Navigate to Pipelines** | **Releases**. Select **MyHealth.AKS.Release pipeline** and click **Edit**.
 
