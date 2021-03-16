@@ -57,6 +57,11 @@ The following azure resources need to be configured for this lab:
    ```
    version=$(az aks get-versions -l <region> --query 'orchestrators[-1].orchestratorVersion' -o tsv)
    ```
+   >Note you can assign variables to streamline resource creation.
+
+   ```
+      AKS_RESOURCE_GROUP=<your-gap-resource-group>
+   ```
 
    II. Create AKS using the latest version available
 
@@ -64,7 +69,7 @@ The following azure resources need to be configured for this lab:
 
    ```
 
-   az aks create --resource-group akshandsonlab --name <unique-aks-cluster-name> --enable-addons monitoring --kubernetes-version $version --generate-ssh-keys --location <region>
+   az aks create --resource-group <your-gap-resource-group> --name <unique-aks-cluster-name> --enable-addons monitoring --kubernetes-version $version --generate-ssh-keys --location <region>
 
    ```
 
@@ -75,7 +80,7 @@ The following azure resources need to be configured for this lab:
    #### Bash
 
    ```
-   az acr create --resource-group akshandsonlab --name <unique-acr-name> --sku Standard --location <region>
+   az acr create --resource-group <your-gap-resource-group> --name <unique-acr-name> --sku Standard --location <region>
    ```
 
 > **Important**: Enter a unique ACR name. ACR name may contain alpha numeric characters only and must be between 5 and 50 characters
@@ -207,144 +212,144 @@ Make sure that you have created the AKS project in your Azure DevOps organizatio
 
    ```Yaml
    apiVersion: apps/v1
-   
+
    kind: Deployment
-   
+
    metadata:
-   
+
      name: mhc-back
      labels:
        app: mhc-back
    spec:
-   
+
      replicas: 1
      selector:
        matchLabels:
          app: mhc-back
      template:
-   
+
        metadata:
-   
+
          labels:
-   
+
            app: mhc-back
-   
+
        spec:
-   
+
          containers:
-   
+
          - name: mhc-back
-   
+
            image: redis
-   
+
            ports:
-   
+
            - containerPort: 6379
-   
+
              name: redis
-   
+
    ---
-   
+
    apiVersion: v1
-   
+
    kind: Service
-   
+
    metadata:
-   
+
      name: mhc-back
-   
+
    spec:
      type: ClusterIP
      ports:
-   
+
      - port: 6379
-   
+
      selector:
-   
+
        app: mhc-back
-   
+
    ---
-   
+
    apiVersion: apps/v1
-   
+
    kind: Deployment
-   
+
    metadata:
-   
+
      name: mhc-front
-   
+
    spec:
-   
+
      replicas: 1
-   
+
      strategy:
        type: RollingUpdate
        rollingUpdate:
-   
+
          maxSurge: 1
-   
+
          maxUnavailable: 1
-   
+
      minReadySeconds: 5
      selector:
        matchLabels:
          app: mhc-front
      template:
-   
+
        metadata:
-   
+
          labels:
-   
+
            app: mhc-front
-   
+
        spec:
-   
+
          containers:
-   
+
          - name: mhc-front
-   
+
            image: akshandsonlabacr001.azurecr.io/myhealth.  web:latest
-   
+
            imagePullPolicy: Always
-   
+
            ports:
-   
+
            - containerPort: 80
-   
+
            resources:
-   
+
              requests:
-   
+
                cpu: 250m
-   
+
              limits:
-   
+
                cpu: 500m
-   
+
            env:
-   
+
            - name: REDIS
-   
+
              value: "mhc-back"
-   
+
    ---
-   
+
    apiVersion: v1
-   
+
    kind: Service
-   
+
    metadata:
-   
+
      name: mhc-front
-   
+
    spec:
-   
+
      type: LoadBalancer
-   
+
      ports:
-   
+
      - port: 80
-   
+
      selector:
        app: mhc-front
    ```
