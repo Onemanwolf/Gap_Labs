@@ -69,7 +69,7 @@ The following azure resources need to be configured for this lab:
 
    ```
 
-   az aks create --resource-group <your-gap-resource-group> --name <unique-aks-cluster-name> --enable-addons monitoring --kubernetes-version $version --generate-ssh-keys --location <region>
+   az aks create --resource-group $AKS_RESOURCE_GROUP --name <unique-aks-cluster-name> --enable-addons monitoring --kubernetes-version $version --generate-ssh-keys --location <region>
 
    ```
 
