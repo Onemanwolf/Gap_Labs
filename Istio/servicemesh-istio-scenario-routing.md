@@ -11,7 +11,7 @@ Use the [az aks create](https://docs.microsoft.com/en-us/cli/azure/aks?view=azur
 ### Azure CLI
 
 ```
-az aks create --resource-group myResourceGroup --name myAKSCluster --node-count 2 --enable-addons monitoring --generate-ssh-keys
+az aks create --resource-group <your gap resource group> --name <your AksClusterName> --node-count 2  --generate-ssh-keys
 ```
 
 After a few minutes, the command completes and returns JSON-formatted information about the cluster.
